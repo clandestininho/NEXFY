@@ -1,0 +1,5 @@
+{
+  "name": "Nexfy AI Mockup",
+  "description": "Crie 5 mockups de um produto específico usando o modelo de edição de imagem Nano Banana (Gemini), com diferentes cenários e ângulos. Faça o upload de uma imagem do produto para começar.",
+  "requestFramePermissions": []
+}
