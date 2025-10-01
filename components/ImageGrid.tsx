@@ -8,9 +8,9 @@ interface ImageGridProps {
 
 const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
-        <div key={index} className="group relative aspect-square bg-neutral-900 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-orange-500/30">
+        <div key={index} className="group relative aspect-square bg-white/5 border border-white/10 rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-105 hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-900/50">
           <img
             src={image}
             alt={`Mockup ${index + 1}`}

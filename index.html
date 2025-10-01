@@ -12,12 +12,37 @@
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.21.0",
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1"
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dropzone": "https://aistudiocdn.com/react-dropzone@^14.3.8"
   }
 }
 </script>
+<style>
+  #background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-color: #000;
+    --dot-color: rgba(255, 255, 255, 0.1);
+    --dot-size: 1px;
+    --dot-gap: 25px;
+    background-image: 
+      linear-gradient(90deg, var(--dot-color) var(--dot-size), transparent var(--dot-size)),
+      linear-gradient(var(--dot-color) var(--dot-size), transparent var(--dot-size));
+    background-size: var(--dot-gap) var(--dot-gap);
+    animation: pan 120s linear infinite;
+  }
+
+  @keyframes pan {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+</style>
 </head>
-  <body class="bg-black">
+  <body class="bg-black overflow-hidden">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

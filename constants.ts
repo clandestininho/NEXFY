@@ -1,6 +1,11 @@
-export const MOCKUP_PROMPT_TEMPLATE = (context: string) => {
-    if (context && context.trim() !== '') {
-      return `Generate a realistic mockup of the provided image placed on a ${context}. The mockup should be high-resolution and look professional. Create one unique variation.`;
-    }
-    return `Generate a realistic mockup of the provided image on a clean, neutral, and professional background. The mockup should be high-resolution and look professional, suitable for a product showcase. Create one unique variation.`;
-};
+// FIX: Moved service logic to geminiService.ts and defined only UI-related constants here.
+export const BACKGROUND_STYLES = [
+  { id: 'default', name: 'Default (AI Choice)' },
+  { id: 'photorealistic-studio', name: 'Photorealistic Studio' },
+  { id: 'minimalist-white', name: 'Minimalist White' },
+  { id: 'urban-street', name: 'Urban Street' },
+  { id: 'nature-forest', name: 'Nature (Forest)' },
+  { id: 'cozy-home', name: 'Cozy Home Interior' },
+  { id: 'tech-abstract', name: 'Tech Abstract' },
+  { id: 'vintage-desk', name: 'Vintage Desk' },
+];
