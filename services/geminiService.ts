@@ -85,7 +85,7 @@ export const generateMockups = async (
   productImageFile: File,
   backgroundDescription: string,
   numberOfImages: number = 5,
-  onProgress: (completed: number) => void
+  onProgress: (completed: number, newImage: string | null) => void
 ): Promise<string[]> => {
   try {
     const imagePart = await fileToGenerativePart(productImageFile);
@@ -110,7 +110,7 @@ export const generateMockups = async (
       generateSingleMockup(imagePart, backgroundDescription, variation)
         .then(result => {
           completedCount++;
-          onProgress(completedCount);
+          onProgress(completedCount, result);
           return result;
         })
     );

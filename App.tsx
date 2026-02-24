@@ -48,10 +48,12 @@ function App() {
     const background = BACKGROUND_STYLES.find(b => b.id === selectedBackground)?.name || 'Default';
 
     try {
-      const images = await generateMockups(productImage, background, 5, (completed) => {
+      await generateMockups(productImage, background, 5, (completed, newImage) => {
         setGenerationProgress(completed);
+        if (newImage) {
+          setGeneratedImages((prev) => [...prev, newImage]);
+        }
       });
-      setGeneratedImages(images);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
