@@ -1,0 +1,3 @@
+## 2026-03-01 - React Re-rendering with Massive Base64 Arrays
+**Learning:** Re-rendering a component containing massive base64 strings (like AI-generated images) is incredibly costly in React, even if the DOM doesn't fundamentally change. In `App.tsx`, merely changing a dropdown (`selectedBackground` state) forced `ImageGrid` to re-diff the huge array of base64 image strings.
+**Action:** When working with base64 data payloads in React state, aggressively memoize child components (`React.memo`) that consume these payloads and ensure all callback props (like `onDownload`) are memoized with `useCallback` to prevent deep diffing performance hits.
