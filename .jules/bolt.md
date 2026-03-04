@@ -1,0 +1,3 @@
+## 2025-03-04 - Memoizing large base64 payload components
+**Learning:** Components receiving arrays of large base64 data strings (like `generatedImages`) must be wrapped in `React.memo`, and all of their callback props (like `handleDownload`) must be wrapped in `useCallback`. Without this, any unrelated state update in the parent component triggers a re-render, causing React to perform expensive diffing on massive string payloads, significantly degrading performance.
+**Action:** Always aggressively memoize both the components and the callback props associated with rendering large string or base64 data payloads in React.
