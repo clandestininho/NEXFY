@@ -1,0 +1,3 @@
+## 2024-05-24 - Expensive Re-renders with Large Base64 Arrays
+**Learning:** `App.tsx` handles large arrays of base64 strings (`generatedImages`) and manages frequent state updates (e.g., `generationProgress`, `isDragActive`). This caused `ImageGrid` (which receives the base64 arrays) and `BackgroundAnimation` to re-render unnecessarily on every state change, leading to UI jank.
+**Action:** Always wrap child components receiving large data payloads (like base64 strings) in `React.memo` and ensure callback props (like `onDownload`) are stabilized with `useCallback` to prevent expensive re-rendering and diffing when the parent state updates frequently.
