@@ -1,0 +1,3 @@
+## 2024-05-18 - React state with large base64 data payloads
+**Learning:** Storing array of base64 data URI strings (`string[]`) in React state can lead to expensive UI re-rendering and diffing, causing noticeable performance degradation during any state update in the parent component, even if the image array itself hasn't changed.
+**Action:** Always wrap child components (like `ImageGrid`) that consume these large payloads in `React.memo`, and strictly ensure all callback props (like `onDownload`) are memoized with `useCallback` to maintain referential equality and prevent unnecessary renders.
