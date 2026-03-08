@@ -3,12 +3,19 @@ import { GoogleGenAI, Modality, Part } from '@google/genai';
 // FIX: Initialize the Gemini AI client.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+// Cache to store the results of file-to-Part conversion to avoid expensive repeated base64 encoding
+const filePartCache = new WeakMap<File, Part>();
+
 /**
  * Converts a File object to a Gemini API Part object.
  * @param file The file to convert.
  * @returns A promise that resolves to a Part object.
  */
 const fileToGenerativePart = async (file: File): Promise<Part> => {
+  if (filePartCache.has(file)) {
+    return filePartCache.get(file)!;
+  }
+
   const base64EncodedData = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve((reader.result as string).split(',')[1]);
@@ -16,12 +23,15 @@ const fileToGenerativePart = async (file: File): Promise<Part> => {
     reader.readAsDataURL(file);
   });
 
-  return {
+  const part: Part = {
     inlineData: {
       data: base64EncodedData,
       mimeType: file.type,
     },
   };
+
+  filePartCache.set(file, part);
+  return part;
 };
 
 /**
