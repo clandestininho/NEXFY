@@ -60,14 +60,18 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt Performance: Memoize the download handler to prevent breaking
+  // React.memo on ImageGrid. This ensures ImageGrid only re-renders when
+  // the generatedImages array actually changes, avoiding expensive re-renders
+  // of components containing large base64 data strings.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">

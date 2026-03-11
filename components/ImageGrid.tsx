@@ -6,7 +6,12 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+// ⚡ Bolt Performance: Wrap component in React.memo.
+// Because the `images` prop contains large base64 data URIs, React's
+// default re-rendering and virtual DOM diffing is very expensive here.
+// Memoizing prevents re-renders when the parent App state updates
+// (e.g. progress bar changes) but the images array reference hasn't changed.
+const ImageGrid: React.FC<ImageGridProps> = React.memo(({ images, onDownload }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -28,6 +33,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
       ))}
     </div>
   );
-};
+});
 
 export default ImageGrid;
