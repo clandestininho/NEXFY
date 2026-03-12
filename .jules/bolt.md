@@ -1,0 +1,3 @@
+## 2024-03-12 - [Virtual DOM Overhead with Base64 Image Payloads]
+**Learning:** React's Virtual DOM diffing algorithm can become extremely expensive when large strings (such as base64-encoded image data URIs) are passed as props to child components that re-render frequently (e.g. during a progress update). The cost isn't just in creating elements, but in diffing these massive strings on every single render cycle of the parent component.
+**Action:** When working with large base64 data payloads in React state, aggressively memoize child components (`React.memo`) that consume these payloads and ensure all callback props are memoized with `useCallback` to prevent expensive UI re-rendering and diffing.
