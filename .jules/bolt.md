@@ -1,0 +1,3 @@
+## 2024-03-14 - Expensive Re-rendering with Large Base64 Arrays
+**Learning:** The application stores generated mockups as an array of base64 data URI strings (`string[]`) in state (`generatedImages` in `App.tsx`). Re-rendering child components (like `ImageGrid`) that consume these large payloads is extremely expensive in React due to the virtual DOM diffing algorithm comparing massive strings.
+**Action:** When working with components that consume these base64 data payloads, always aggressively memoize the child components (e.g., using `React.memo`) and ensure all callback props (like `handleDownload`) are memoized with `useCallback` to prevent expensive UI freezes when unrelated parent state changes.
