@@ -1,0 +1,3 @@
+## 2024-03-17 - Expensive React diffing with base64 data payloads
+**Learning:** Large base64 data URIs stored in React state (like generated mockup images) can cause severe performance bottlenecks during UI re-renders. When parent components re-render (e.g., due to unrelated state changes like selecting a different background), child components consuming these massive strings will be re-evaluated. React's diffing algorithm becomes extremely slow when comparing large string arrays.
+**Action:** Aggressively memoize child components (`React.memo`) that consume base64 payloads and ensure all callback props passed to them are memoized with `useCallback`. This prevents unnecessary and expensive diffing.
