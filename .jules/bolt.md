@@ -1,0 +1,3 @@
+## 2024-05-18 - Base64 Payload Memoization
+**Learning:** In a React application where child components consume large base64 data payloads as props, failing to memoize those children will lead to expensive UI re-rendering and string diffing during React's reconciliation process every time the parent component's state updates (e.g., a progress bar or unrelated dropdown).
+**Action:** Aggressively memoize child components (`React.memo`) that consume large base64 data payloads, and ensure all callback props passed to them are memoized with `useCallback` to prevent unnecessary performance degradation.
