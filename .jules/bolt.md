@@ -1,0 +1,3 @@
+## 2024-05-28 - Base64 Data URL Extraction Optimization
+**Learning:** In Node.js/V8, using `String.prototype.split(',')` on large (e.g., 5MB) image Data URLs creates an intermediate array and allocates significant memory for string segments, causing high CPU/memory pressure during file uploads. Using `.substring(result.indexOf(',') + 1)` completely avoids this array allocation and is mathematically safe since `readAsDataURL` guarantees a comma separator.
+**Action:** Always prefer `substring` + `indexOf` over `split` when extracting the payload from structured prefix formats (like Data URLs) to minimize garbage collection overhead on large strings.
