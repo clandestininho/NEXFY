@@ -8,7 +8,7 @@ This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/drive/1cN52JsDWvisXW0_xwxsMBSZlUc3JOgKm
 
-## Run Locally
+## Run Locally e
 
 **Prerequisites:**  Node.js (nao sim)
 
