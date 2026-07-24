@@ -10,7 +10,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1cN52JsDWvisXW0_xwxsMBS
 
 ## Run Locally
 
-**Prerequisites:**  Node.js (nao)
+**Prerequisites:**  Node.js (nao sim)
 
 
 1. Install dependencies:
