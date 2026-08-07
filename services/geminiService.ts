@@ -3,25 +3,45 @@ import { GoogleGenAI, Modality, Part } from '@google/genai';
 // FIX: Initialize the Gemini AI client.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+// ⚡ Bolt: Cache File to Part conversions using WeakMap to prevent memory leaks.
+// This avoids repeated expensive base64 encodings if the same image is reused.
+const filePartCache = new WeakMap<File, Part>();
+
 /**
  * Converts a File object to a Gemini API Part object.
  * @param file The file to convert.
  * @returns A promise that resolves to a Part object.
  */
 const fileToGenerativePart = async (file: File): Promise<Part> => {
+  // ⚡ Bolt: Return cached Part if available
+  if (filePartCache.has(file)) {
+    return filePartCache.get(file)!;
+  }
+
   const base64EncodedData = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve((reader.result as string).split(',')[1]);
+    // ⚡ Bolt: Optimized base64 extraction. .substring(result.indexOf(',') + 1) avoids
+    // creating a large intermediate array and string copy that .split(',')[1] creates,
+    // saving significant memory and CPU time for large images (up to 10MB).
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.substring(result.indexOf(',') + 1));
+    };
     reader.onerror = (error) => reject(error);
     reader.readAsDataURL(file);
   });
 
-  return {
+  const part: Part = {
     inlineData: {
       data: base64EncodedData,
       mimeType: file.type,
     },
   };
+
+  // ⚡ Bolt: Cache the resulting Part
+  filePartCache.set(file, part);
+
+  return part;
 };
 
 /**
