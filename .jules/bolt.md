@@ -1,0 +1,3 @@
+## 2024-06-18 - [Aggressive Memoization for Large Payloads]
+**Learning:** This codebase stores generated mockup images as an array of base64 data URI strings (`string[]`) in the React state. These large payloads can cause expensive UI re-rendering and diffing when parent components (like `App.tsx`) update independently (e.g., changing background style while images are displayed).
+**Action:** When working with large base64 data payloads in React state, aggressively memoize child components (`React.memo`) that consume these payloads and ensure all callback props (like `onDownload`) are memoized with `useCallback` to prevent expensive UI re-rendering.
