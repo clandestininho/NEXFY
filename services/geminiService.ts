@@ -1,4 +1,5 @@
 import { GoogleGenAI, Modality, Part } from '@google/genai';
+import { compressImage } from '../utils/imageUtils';
 
 // FIX: Initialize the Gemini AI client.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -8,7 +9,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
  * @param file The file to convert.
  * @returns A promise that resolves to a Part object.
  */
-const fileToGenerativePart = async (file: File): Promise<Part> => {
+const fileToGenerativePart = async (file: File | Blob): Promise<Part> => {
   const base64EncodedData = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve((reader.result as string).split(',')[1]);
@@ -88,7 +89,10 @@ export const generateMockups = async (
   onProgress: (completed: number) => void
 ): Promise<string[]> => {
   try {
-    const imagePart = await fileToGenerativePart(productImageFile);
+    // Optimization: Compress and resize image before sending to API
+    // Reduces upload size significantly (e.g. 5MB -> 300KB) which speeds up the 5 parallel requests
+    const compressedImageBlob = await compressImage(productImageFile, 1536, 0.8);
+    const imagePart = await fileToGenerativePart(compressedImageBlob);
 
     // Variations to ensure each mockup is unique and photorealistic
     const variations = [
