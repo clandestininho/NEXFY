@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { generateMockups } from './services/geminiService';
 import { BACKGROUND_STYLES } from './constants';
@@ -60,14 +60,16 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt: Memoize the download handler to prevent unnecessary re-renders of the memoized ImageGrid component,
+  // which is crucial since it receives large base64 strings and shouldn't re-render on unrelated state changes.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">

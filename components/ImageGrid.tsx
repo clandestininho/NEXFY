@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { DownloadIcon } from './Icons';
 
 interface ImageGridProps {
@@ -6,7 +6,7 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+const ImageGrid = ({ images, onDownload }: ImageGridProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -30,4 +30,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
   );
 };
 
-export default ImageGrid;
+// ⚡ Bolt: React.memo prevents expensive Virtual DOM diffing of large base64 data URIs
+// when parent states (like App.tsx background animations or generation progress) change.
+export default memo(ImageGrid);
