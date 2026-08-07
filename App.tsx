@@ -4,6 +4,7 @@ import { generateMockups } from './services/geminiService';
 import { BACKGROUND_STYLES } from './constants';
 import ImageGrid from './components/ImageGrid';
 import BackgroundAnimation from './components/BackgroundAnimation';
+import Loader from './components/Loader';
 import { UploadIcon, SparklesIcon, GridIcon } from './components/Icons';
 
 function App() {
@@ -48,10 +49,17 @@ function App() {
     const background = BACKGROUND_STYLES.find(b => b.id === selectedBackground)?.name || 'Default';
 
     try {
-      const images = await generateMockups(productImage, background, 5, (completed) => {
-        setGenerationProgress(completed);
-      });
-      setGeneratedImages(images);
+      await generateMockups(
+        productImage,
+        background,
+        5,
+        (completed) => {
+          setGenerationProgress(completed);
+        },
+        (image) => {
+          setGeneratedImages(prev => [...prev, image]);
+        }
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
@@ -170,7 +178,17 @@ function App() {
             )}
 
             {generatedImages.length > 0 && (
-              <ImageGrid images={generatedImages} onDownload={handleDownload} />
+              <>
+                <ImageGrid images={generatedImages} onDownload={handleDownload} />
+                {isLoading && (
+                  <div className="mt-8 flex flex-col items-center justify-center text-neutral-400">
+                    <div className="flex items-center space-x-3 bg-white/5 px-4 py-2 rounded-full">
+                      <Loader />
+                      <span className="text-sm font-medium">Generating more... ({generationProgress}/5)</span>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
