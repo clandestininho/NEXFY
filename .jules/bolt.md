@@ -1,0 +1,3 @@
+## 2024-05-18 - Prevented expensive React diffing on large base64 strings
+**Learning:** React re-rendering large lists (like `ImageGrid`) where props contain arrays of huge base64 strings is extremely expensive for the React diffing algorithm, causing noticeable UI lag (e.g., when updating `selectedBackground` in `App.tsx` which re-renders the parent).
+**Action:** Aggressively memoize child components (`React.memo`) that consume these large base64 payloads and ensure all callback props (`onDownload`) are memoized with `useCallback` to prevent breaking the component memoization.
