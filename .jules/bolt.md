@@ -1,0 +1,3 @@
+## 2025-03-06 - Optimize Base64 Extraction from Data URLs
+**Learning:** Extracting the base64 payload from a Data URL using `.substring(result.indexOf(',') + 1)` is significantly more CPU and memory efficient than `.split(',')[1]`. The `split` method allocates a large intermediate array and duplicates the multi-megabyte base64 string in memory, causing a severe performance bottleneck during file processing.
+**Action:** When handling large Data URL strings returned by `FileReader.readAsDataURL()`, always use `substring` and `indexOf` to extract the base64 payload to avoid unnecessary memory allocations.
