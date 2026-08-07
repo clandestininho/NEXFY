@@ -1,0 +1,3 @@
+## 2024-05-24 - Aggressive Memoization for Large Base64 Data URI Payloads
+**Learning:** When passing large arrays of base64 data URIs (e.g., generated images) as props to child components, standard React re-rendering can become extremely expensive due to the cost of diffing these large strings, even if the image data itself hasn't changed.
+**Action:** Always wrap components consuming large data URIs (like `ImageGrid`) in `React.memo()`. Crucially, ensure that all callback functions (like `onDownload`) passed to these memoized components are wrapped in `useCallback` to maintain referential equality across parent re-renders, preventing the `memo` from being broken.
