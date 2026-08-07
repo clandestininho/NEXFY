@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { generateMockups } from './services/geminiService';
 import { BACKGROUND_STYLES } from './constants';
 import ImageGrid from './components/ImageGrid';
 import BackgroundAnimation from './components/BackgroundAnimation';
@@ -48,6 +47,9 @@ function App() {
     const background = BACKGROUND_STYLES.find(b => b.id === selectedBackground)?.name || 'Default';
 
     try {
+      // Lazy load the service to reduce initial bundle size
+      const { generateMockups } = await import('./services/geminiService');
+
       const images = await generateMockups(productImage, background, 5, (completed) => {
         setGenerationProgress(completed);
       });
