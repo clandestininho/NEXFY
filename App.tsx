@@ -60,14 +60,16 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt: Memoized handleDownload to prevent recreation on every render,
+  // which when passed to the memoized ImageGrid, prevents expensive diffing of the large base64 strings.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">

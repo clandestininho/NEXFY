@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { DownloadIcon } from './Icons';
 
 interface ImageGridProps {
@@ -6,7 +6,9 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+// ⚡ Bolt: Wrapped ImageGrid in React.memo to prevent unnecessary re-renders when parent state changes.
+// Since it receives large base64 image strings, diffing is expensive and we only want to re-render if the images themselves change.
+const ImageGrid = memo(function ImageGrid({ images, onDownload }: ImageGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -28,6 +30,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
       ))}
     </div>
   );
-};
+});
 
 export default ImageGrid;
