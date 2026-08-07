@@ -6,7 +6,13 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+// ⚡ Bolt Optimization:
+// Wrapped ImageGrid in React.memo to prevent unnecessary re-renders.
+// Why: `images` array contains massive base64 strings. Re-rendering this component
+// and performing virtual DOM diffs on these strings when unrelated parent state
+// (like background selection) changes is extremely expensive.
+// Impact: Prevents O(n) expensive string comparisons where n is the size of the base64 data.
+const ImageGrid: React.FC<ImageGridProps> = React.memo(({ images, onDownload }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -28,6 +34,8 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
       ))}
     </div>
   );
-};
+});
+
+ImageGrid.displayName = 'ImageGrid';
 
 export default ImageGrid;

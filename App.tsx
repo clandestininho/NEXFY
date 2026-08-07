@@ -60,14 +60,19 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt Optimization:
+  // Wrapped in useCallback to maintain a stable reference across re-renders.
+  // Why: This function is passed as a prop to `ImageGrid`. Without useCallback,
+  // a new function instance would be created every time App renders, breaking
+  // the `React.memo` optimization on `ImageGrid`.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">
