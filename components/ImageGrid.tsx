@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { DownloadIcon } from './Icons';
 
 interface ImageGridProps {
@@ -6,7 +6,10 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+// Wrap in memo to prevent expensive re-rendering and diffing when the parent App component updates
+// (e.g., when other state changes but the images array reference hasn't changed).
+// This is critical for performance since images can contain large base64 data payloads.
+const ImageGrid = memo(({ images, onDownload }: ImageGridProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -28,6 +31,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
       ))}
     </div>
   );
-};
+});
 
 export default ImageGrid;
