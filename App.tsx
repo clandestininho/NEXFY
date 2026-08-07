@@ -60,14 +60,16 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt: Memoize handleDownload so its reference is stable across App re-renders.
+  // This ensures the React.memo optimization on ImageGrid is not broken when parent state updates.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">
