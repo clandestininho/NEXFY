@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { generateMockups } from './services/geminiService';
 import { BACKGROUND_STYLES } from './constants';
 import ImageGrid from './components/ImageGrid';
 import BackgroundAnimation from './components/BackgroundAnimation';
 import { UploadIcon, SparklesIcon, GridIcon } from './components/Icons';
+
+const ACCEPTED_FILE_TYPES = { 'image/*': ['.jpeg', '.png', '.jpg', '.webp'] };
 
 function App() {
   const [productImage, setProductImage] = useState<File | null>(null);
@@ -28,11 +30,16 @@ function App() {
     }
   }, [previewUrl]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  // ⚡ Bolt Performance Optimization:
+  // Hoisted static accept mapping and memoized dropzone options to prevent unnecessary
+  // re-evaluations and re-renders of the dropzone area on every state change.
+  const dropzoneOptions = useMemo(() => ({
     onDrop,
-    accept: { 'image/*': ['.jpeg', '.png', '.jpg', '.webp'] },
+    accept: ACCEPTED_FILE_TYPES,
     multiple: false,
-  });
+  }), [onDrop]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone(dropzoneOptions);
   
   const handleGenerate = async () => {
     if (!productImage) {
