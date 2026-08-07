@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo, FC } from 'react';
 import { DownloadIcon } from './Icons';
 
 interface ImageGridProps {
@@ -6,7 +6,10 @@ interface ImageGridProps {
   onDownload: (imageSrc: string, index: number) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
+// ⚡ Bolt: Memoize component to prevent expensive re-rendering and diffing of
+// large base64 image data string arrays when parent component's unrelated state
+// (like background style or hover states) changes.
+const ImageGrid: FC<ImageGridProps> = memo(({ images, onDownload }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {images.map((image, index) => (
@@ -28,6 +31,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
       ))}
     </div>
   );
-};
+});
 
 export default ImageGrid;
