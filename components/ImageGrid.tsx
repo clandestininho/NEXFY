@@ -30,4 +30,6 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onDownload }) => {
   );
 };
 
-export default ImageGrid;
+// Memoize ImageGrid so it only re-renders when its props (images or onDownload) change.
+// This prevents expensive diffing of the large base64 strings if App re-renders.
+export default React.memo(ImageGrid);
