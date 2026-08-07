@@ -60,14 +60,18 @@ function App() {
     }
   };
 
-  const handleDownload = (imageSrc: string, index: number) => {
+  // ⚡ Bolt Optimization: Memoize the download callback to prevent re-creating
+  // the function reference on every re-render of App, which in turn prevents
+  // the child ImageGrid component (which receives this callback) from re-rendering
+  // unnecessarily when other state (like generationProgress) changes.
+  const handleDownload = useCallback((imageSrc: string, index: number) => {
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = `mockup-${index + 1}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
   
   return (
     <div className="relative min-h-screen w-full font-sans text-white">
