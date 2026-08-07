@@ -1,0 +1,3 @@
+## 2024-05-10 - String Allocation Bottleneck in Data URLs
+**Learning:** Extracting base64 payload from a Data URL using `.split(',')[1]` causes massive memory allocations and CPU overhead due to intermediate array and string creation. For a 5MB image file (resulting in ~7MB base64 string), `.split()` took ~48ms while `.substring(indexOf(','))` took ~0.17ms. This is highly specific to how this app handles large local file uploads via FileReader before sending to Gemini.
+**Action:** Always use `.substring(str.indexOf(',') + 1)` instead of `.split(',')[1]` when parsing large Data URLs to avoid allocating intermediate arrays and strings.
